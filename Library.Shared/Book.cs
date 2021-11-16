@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Library.Api.Models
+namespace Library.Api.Shared
 {
     public partial class Book
     {
