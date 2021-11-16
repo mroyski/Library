@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Library.Api.Helpers;
+using Library.Api.Shared;
 
 namespace Library.Api.Controllers
 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Library.Api.Models;
+using Library.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Api.Controllers

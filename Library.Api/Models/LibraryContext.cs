@@ -1,4 +1,5 @@
 ﻿using System;
+using Library.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

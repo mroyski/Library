@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Library.Api.Models;
 using System.Linq;
 
 namespace Library.Api.ValidationAttributes
