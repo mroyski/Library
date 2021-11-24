@@ -1,6 +1,6 @@
 using System;
 
-namespace Library.Api
+namespace Library.Shared
 {
     public class Constants
     {

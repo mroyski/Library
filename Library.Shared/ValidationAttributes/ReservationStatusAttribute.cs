@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Library.Shared;
 
 namespace Library.Api.ValidationAttributes
 {

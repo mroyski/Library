@@ -1,6 +1,6 @@
 using System;
 
-namespace Library.Api.Shared
+namespace Library.Shared
 {
     public class BookResourceParameters
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Library.Api.Shared;
+using Library.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

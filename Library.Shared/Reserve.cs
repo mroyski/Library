@@ -4,7 +4,7 @@ using Library.Api.ValidationAttributes;
 
 #nullable disable
 
-namespace Library.Api.Shared
+namespace Library.Shared
 {
     public partial class Reserve
     {
