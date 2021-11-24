@@ -1,0 +1,35 @@
+@page "/book"
+@using Library.Shared;
+
+@if (Books == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var book in Books.ToList())
+    {
+        <p>@book.BookName</p>
+    }
+}
+
+
+@code {
+    static readonly HttpClient _httpClient = new HttpClient();
+    public IEnumerable<Book> Books { get; set; }
+
+    static async Task<IEnumerable<Book>> GetBooks()
+    {
+        return await JsonSerializer.DeserializeAsync<IEnumerable<Book>>
+        (await _httpClient.GetStreamAsync($"http://localhost:45785/api/books"), new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Books = await GetBooks();
+    }
+}
