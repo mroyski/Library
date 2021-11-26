@@ -1,4 +1,4 @@
-@page "/book"
+@page "/books"
 @using Library.Shared;
 @using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
@@ -9,10 +9,22 @@
 }
 else
 {
-    @foreach (var book in Books.ToList())
-    {
-        <p>@book.BookName</p>
-    }
+    <div class="row">
+        @foreach (var book in Books.ToList())
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.BookName</h5>
+                        <p class="card-text">@book.Author</p>
+                        <p class="card-text">@book.Category</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
 }
 
 
