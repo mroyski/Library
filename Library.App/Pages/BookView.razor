@@ -1,7 +1,4 @@
 @page "/books"
-@using Library.Shared;
-@using Microsoft.Extensions.Configuration
-@inject IConfiguration Configuration
 
 @if (Books == null)
 {
@@ -10,7 +7,7 @@
 else
 {
     <div class="row">
-        @foreach (var book in Books.ToList())
+        @foreach (var book in Books)
         {
             <div class="col-sm-6">
                 <div class="card">
@@ -25,26 +22,4 @@ else
         }
     </div>
 
-}
-
-
-@code {
-    static readonly HttpClient _httpClient = new HttpClient();
-    static string LibraryApiAddress { get; set; }
-    public IEnumerable<Book> Books { get; set; }
-
-    static async Task<IEnumerable<Book>> GetBooks()
-    {
-        return await JsonSerializer.DeserializeAsync<IEnumerable<Book>>
-        (await _httpClient.GetStreamAsync($"{LibraryApiAddress}/api/books"), new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true
-        });
-    }
-
-    protected async override Task OnInitializedAsync()
-    {
-        LibraryApiAddress = Configuration["Library.Api.Address"];
-        Books = await GetBooks();
-    }
 }
