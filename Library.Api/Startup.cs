@@ -41,6 +41,7 @@ namespace Library.Api
             services.AddDbContext<LibraryContext>();
 
             services.AddScoped<IBooksRepository, BooksRepository>();
+            services.AddScoped<IIssuesRepository, IssuesRepository>();
 
             services.AddControllers();
         }

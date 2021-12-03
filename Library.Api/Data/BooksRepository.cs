@@ -28,7 +28,7 @@ namespace Library.Api.Data
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
 
             if (book == null)
-                throw new ArgumentException($"no match for book id {bookId}");
+                throw new ArgumentException($"No match for book id {bookId}");
 
             return book;
         }
@@ -43,7 +43,7 @@ namespace Library.Api.Data
                 var property = typeof(Book).GetProperty(formattedParameter);
 
                 if (property == null)
-                    throw new ArgumentException("property does not exist");
+                    throw new ArgumentException("Property does not exist");
 
                 books = books.OrderBy(formattedParameter);
             }
