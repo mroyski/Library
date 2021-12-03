@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Library.Api.Models
+namespace Library.Api.Data
 {
     public partial class LibraryContext : DbContext
     {

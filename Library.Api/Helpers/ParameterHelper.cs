@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using Library.Api.Models;
+using Library.Api.Data;
 using Library.Shared;
 
 namespace Library.Api.Helpers

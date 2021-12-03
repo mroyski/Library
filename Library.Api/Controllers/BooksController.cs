@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Library.Api.Models;
+using Library.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
@@ -15,40 +15,23 @@ namespace Library.Api.Controllers
     [Route("api/books")]
     public class BooksController : ControllerBase
     {
-        private readonly LibraryContext _context;
+        private readonly IBooksRepository _repo;
 
-        public BooksController()
+        public BooksController(IBooksRepository repo)
         {
-            _context = new LibraryContext();
+            _repo = repo;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Book>> GetBooks([FromQuery] BookResourceParameters bookResourceParameters)
         {
-            var books = _context.Books as IQueryable<Book>;
-
-            if (!string.IsNullOrWhiteSpace(bookResourceParameters.OrderBy))
-            {
-                var formattedParameter = ParameterHelper.FormatParameter<Book>(bookResourceParameters.OrderBy);
-                var property = typeof(Book).GetProperty(formattedParameter);
-                
-                if (property == null)
-                    return BadRequest();
-
-                books = books.OrderBy(formattedParameter);
-            }
-            return Ok(books.ToList());
+            return Ok(_repo.GetBooks(bookResourceParameters));
         }
 
         [HttpGet("{bookId}", Name = "GetBook")]
         public ActionResult<Book> GetBook(int bookId)
         {
-            var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
-
-            if (book == null)
-                return NotFound();
-
-            return Ok(book);
+            return Ok(_repo.GetBook(bookId));
         }
 
         [HttpPost]
@@ -59,8 +42,7 @@ namespace Library.Api.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            _context.Add(book);
-            _context.SaveChanges();
+            _repo.AddBook(book);
 
             return CreatedAtRoute("GetBook", new { bookId = book.BookId }, book);
         }
