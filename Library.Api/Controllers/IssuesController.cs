@@ -40,7 +40,6 @@ namespace Library.Api.Controllers
         public ActionResult<Issue> AddIssue(int bookId, int memberId)
         {
             var issue = _repo.AddIssue(bookId, memberId);
-
             return CreatedAtRoute("GetIssue", new { issueId = issue.LibIssueId }, issue);
         }
     }

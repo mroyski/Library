@@ -11,17 +11,17 @@ namespace Library.Api.Controllers
     [Route("api/reserves")]
     public class ReservesController : ControllerBase
     {
-        private readonly LibraryContext _context;
+        private readonly IReservesRepository _repo;
 
-        public ReservesController()
+        public ReservesController(IReservesRepository repo)
         {
-            _context = new LibraryContext();
+            _repo = repo;
         }
 
         [HttpGet("{reserveId}", Name = "GetReservation")]
-        public ActionResult<IEnumerable<Reserve>> GetReservation(int reserveId)
+        public ActionResult<Reserve> GetReservation(int reserveId)
         {
-            var reservation = _context.Reserves.FirstOrDefault(r => r.ReserveId == reserveId);
+            var reservation = _repo.GetReservation(reserveId);
 
             if (reservation == null)
                 return NotFound();
@@ -33,19 +33,10 @@ namespace Library.Api.Controllers
         public ActionResult<IEnumerable<Reserve>> GetReservationsByBook(
             [FromRoute] int bookId, [FromQuery] string status)
         {
-            var collection = _context.Reserves as IQueryable<Reserve>;
+            var collection = _repo.GetReservationsByBook(bookId, status);
 
-            collection = collection.Where(r => r.BookId == bookId);
-
-            if (status != null)
-            {
-                if (!Constants.ReservationStatuses.Statuses.Contains(status.ToLower()))
-                {
-                    return new BadRequestObjectResult(new Exception("Invalid Reservation Status"));
-                }
-
-                collection = collection.Where(r => r.ReserveStatus == status);
-            }
+            if (collection == null)
+                return NotFound();
 
             return Ok(collection.ToList());
         }
@@ -53,30 +44,7 @@ namespace Library.Api.Controllers
         [HttpPost("books/{bookId}/members/{memberId}")]
         public ActionResult AddReservation(int bookId, int memberId)
         {
-            var existingReserve = _context.Reserves.FirstOrDefault(r => r.MemberId == memberId &&
-                                                                     r.BookId == bookId &&
-                                                                     r.ReserveStatus != "closed");
-            if (existingReserve != null)
-                return new BadRequestObjectResult(
-                    new Exception("Member already has open or pending reservation on this book."));
-
-            var alreadyReserved = _context.Reserves
-                .Where(r => r.BookId == bookId)
-                .Any(r => r.ReserveStatus == "open" || r.ReserveStatus == "pending");
-
-            var reserve = new Reserve
-            {
-                BookId = bookId,
-                MemberId = memberId,
-                ReserveDate = DateTime.Now,
-                ReserveStatus = "pending"
-            };
-
-            if (!TryValidateModel(reserve))
-                return ValidationProblem(ModelState);
-
-            _context.Reserves.Add(reserve);
-            _context.SaveChanges();
+            var reserve = _repo.AddReservation(bookId, memberId);
 
             return CreatedAtRoute(
                 "GetReservation", 
