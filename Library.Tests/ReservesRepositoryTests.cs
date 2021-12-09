@@ -13,7 +13,7 @@ namespace Library.Tests
     {
         private readonly Mock<LibraryContext> mockContext;
         private readonly Mock<DbSet<Reserve>> mockSet;
-        private readonly Mock<ReservesRepository> mockRepo;
+        private readonly ReservesRepository mockRepo;
         private List<Reserve> data;
         public ReservesRepositoryTests()
         {
@@ -30,12 +30,13 @@ namespace Library.Tests
 
             mockContext = new Mock<LibraryContext>();
             mockContext.Setup(c => c.Reserves).Returns(mockSet.Object);
+            
+            mockRepo = new ReservesRepository(mockContext.Object);
         }
 
         [Fact]
         public void GetReservation_ReturnsReservationById()
         {
-            var mockRepo = new ReservesRepository(mockContext.Object);
             var reserve = mockRepo.GetReservation(1);
 
             Assert.Equal(1, reserve.ReserveId);
