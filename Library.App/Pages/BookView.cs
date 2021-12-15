@@ -12,7 +12,7 @@ namespace Library.App.Pages
     public partial class BookView
     {
         static readonly HttpClient _httpClient = new HttpClient();
-        static string LibraryApiAddress { get; set; }
+        static string LibraryApiUrl { get; set; }
         public IEnumerable<Book> Books { get; set; }
 
         [Inject]
@@ -21,7 +21,7 @@ namespace Library.App.Pages
         static async Task<IEnumerable<Book>> GetBooks()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<Book>>
-            (await _httpClient.GetStreamAsync($"{LibraryApiAddress}/api/books"), new JsonSerializerOptions()
+            (await _httpClient.GetStreamAsync($"{LibraryApiUrl}/api/books"), new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -29,7 +29,7 @@ namespace Library.App.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            LibraryApiAddress = Configuration["Library.Api.Address"];
+            LibraryApiUrl = Configuration["LibraryApiUrl"];
             Books = await GetBooks();
         }
     }
