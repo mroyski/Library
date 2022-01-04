@@ -19,7 +19,7 @@ namespace Library.Tests
         {
             var data = new List<Reserve>
             {
-                new Reserve { ReserveId = 1, BookId = 1, MemberId = 1, ReserveDate = DateTime.Now, ReserveStatus = "closed" }
+                new Reserve { ReserveId = 1, BookId = 1, MemberId = 1, ReserveDate = DateTime.Now, ReserveStatus = "pending" }
             }.AsQueryable();
 
             mockSet = new Mock<DbSet<Reserve>>();
@@ -30,7 +30,7 @@ namespace Library.Tests
 
             mockContext = new Mock<LibraryContext>();
             mockContext.Setup(c => c.Reserves).Returns(mockSet.Object);
-            
+
             mockRepo = new ReservesRepository(mockContext.Object);
         }
 
@@ -40,6 +40,12 @@ namespace Library.Tests
             var reserve = mockRepo.GetReservation(1);
 
             Assert.Equal(1, reserve.ReserveId);
+        }
+
+        [Fact]
+        public void MemberHasExistingReservation_ThrowsException()
+        {
+            Assert.Throws<Exception>(() => mockRepo.AddReservation(1, 1));
         }
     }
 }
