@@ -11,15 +11,16 @@ namespace Library.Tests
 {
     public class ReserveTests
     {
+        private readonly LibraryContext mockContext;
         private readonly ReservesRepository mockRepo;
         public ReserveTests()
         {
-            var libraryContext = new LibraryContextBuilder()
+            mockContext = new LibraryContextBuilder()
                                     .WithSimpleReserveData()
                                     .WithSimpleIssueData()
                                     .Build();
 
-            mockRepo = new ReservesRepository(libraryContext);
+            mockRepo = new ReservesRepository(mockContext);
         }
 
         [Fact]
@@ -34,6 +35,18 @@ namespace Library.Tests
         public void MemberHasExistingReservation_ThrowsException()
         {
             Assert.Throws<Exception>(() => mockRepo.AddReservation(1, 1));
+        }
+
+        [Fact]
+        public void BookWithReservationReturned_RemovesCurrentReservation()
+        {
+            var reserve = mockRepo.GetReservation(1);
+            Assert.Equal("pending", reserve.ReserveStatus);
+
+            var issueRepo = new IssuesRepository(mockContext);
+            issueRepo.ReturnBook(1);
+
+            Assert.Equal("closed", reserve.ReserveStatus);
         }
     }
 }

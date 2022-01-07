@@ -33,7 +33,7 @@ namespace Library.Tests
         {
             var issueData = new List<Issue>
             {
-                new Issue {LibIssueId = 1, BookId =1, MemberId = 1, IssueDate = DateTime.Now, ReturnDate = null }
+                new Issue { LibIssueId = 1, BookId = 1, MemberId = 1, IssueDate = DateTime.Now, ReturnDate = null }
             }.AsQueryable();
 
             var issueMockSet = DbSetBuilder<Issue>.Build(issueData);
