@@ -9,28 +9,20 @@ using Xunit;
 
 namespace Library.Tests
 {
-    public class ReservesRepositoryTests
+    public class DbSetBuilder
     {
-        private readonly Mock<LibraryContext> mockContext;
         private readonly Mock<DbSet<Reserve>> mockSet;
+        private readonly Mock<LibraryContext> mockContext;
         private readonly ReservesRepository mockRepo;
-        private List<Reserve> data;
-        public ReservesRepositoryTests()
+        public DbSetBuilder()
         {
             var data = new List<Reserve>
             {
                 new Reserve { ReserveId = 1, BookId = 1, MemberId = 1, ReserveDate = DateTime.Now, ReserveStatus = "pending" }
             }.AsQueryable();
 
-            mockSet = new Mock<DbSet<Reserve>>();
-            mockSet.As<IQueryable<Reserve>>().Setup(m => m.Provider).Returns(data.Provider);
-            mockSet.As<IQueryable<Reserve>>().Setup(m => m.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<Reserve>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<Reserve>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
-
-            mockContext = new Mock<LibraryContext>();
-            mockContext.Setup(c => c.Reserves).Returns(mockSet.Object);
-
+            mockSet = DbSetBuilder<Reserve>.Build(data);
+            mockContext = ContextBuilder.BuildReserveContext(mockSet);
             mockRepo = new ReservesRepository(mockContext.Object);
         }
 
