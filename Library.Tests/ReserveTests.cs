@@ -11,19 +11,15 @@ namespace Library.Tests
 {
     public class ReserveTests
     {
-        private readonly Mock<DbSet<Reserve>> mockSet;
-        private readonly Mock<LibraryContext> mockContext;
         private readonly ReservesRepository mockRepo;
         public ReserveTests()
         {
-            var data = new List<Reserve>
-            {
-                new Reserve { ReserveId = 1, BookId = 1, MemberId = 1, ReserveDate = DateTime.Now, ReserveStatus = "pending" }
-            }.AsQueryable();
+            var libraryContext = new LibraryContextBuilder()
+                                    .WithSimpleReserveData()
+                                    .WithSimpleIssueData()
+                                    .Build();
 
-            mockSet = DbSetBuilder<Reserve>.Build(data);
-            mockContext = ContextBuilder.BuildReserveContext(mockSet);
-            mockRepo = new ReservesRepository(mockContext.Object);
+            mockRepo = new ReservesRepository(libraryContext);
         }
 
         [Fact]
