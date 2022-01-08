@@ -1,0 +1,31 @@
+﻿@page "/issue"
+@using Library.App.Services
+@using Library.Shared
+
+<h3>Issues</h3>
+
+@if (Issues == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var issue in Issues)
+    {
+        <p>@issue.LibIssueId</p>
+        <p>@issue.IssueDate</p>
+    }
+}
+
+
+@code {
+    public IEnumerable<Issue> Issues { get; set; }
+
+    [Inject]
+    public IDataService DataService { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Issues = await DataService.GetIssues();
+    }
+}

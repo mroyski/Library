@@ -27,5 +27,14 @@ namespace Library.App.Services
             return JsonSerializer.Deserialize<IEnumerable<Book>>(data,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
+
+        public async Task<IEnumerable<Issue>> GetIssues()
+        {
+            var url = _config.GetValue<string>("LibraryApiUrl");
+            var response = await _httpClient.GetAsync($"{url}/api/issues");
+            var data = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<IEnumerable<Issue>>(data,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
     }
 }
